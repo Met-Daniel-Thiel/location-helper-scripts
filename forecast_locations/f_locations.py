@@ -29,5 +29,5 @@ for i in forecast_locations:
                           popup=f"Forcast Location: {name}",
                           icon=folium.Icon(icon="info-sign")).add_to(map_uk)
             
-os.mkdir('./map_output_files')
-map_uk.save('map_output_files/forecast_locations_map_uk.html')
+os.mkdir('./forecast_locations/map_output_files')
+map_uk.save('./forecast_locations/map_output_files/forecast_locations_map_uk.html')
