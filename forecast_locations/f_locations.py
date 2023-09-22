@@ -4,9 +4,9 @@ import os
 
 # Manual input location info from Gazetteer
 # https://github.com/MetOffice/locations-search-pkg-os/tree/master/src/main/resources/gazetteer
-c_lon = -3.39
-c_lat = 57.00
-name = "Gazetteer Braemar"
+c_lon = -3.53
+c_lat = 50.48
+name = "Gazetteer Torquay (Torbay)"
 
 # Create basic map and add the gazetteer location
 map_uk = folium.Map(location=[c_lat,c_lon], zoom_start=14)
