@@ -17,7 +17,7 @@ folium.Marker([c_lat,c_lon],
               ).add_to(map_uk)
 
 # Add all forecast locations within 0.2 lat and 0.2 lon of the gazetteer location
-with open('C:/Git/useful_python/forecast_locations/forecast_locations.json', 'r') as f:
+with open('forecast_locations/forecast_locations.json', 'r') as f:
     forecast_locations = json.load(f)
 
 
@@ -33,5 +33,5 @@ for i in forecast_locations:
                           icon=folium.Icon(icon="info-sign")).add_to(map_uk)
             
 
-map_uk.save('C:/Git/useful_python/forecast_locations/map_output_files/forecast_locations_map_uk.html')
+map_uk.save('forecast_locations/map_output_files/forecast_locations_map_uk.html')
 #map_uk
