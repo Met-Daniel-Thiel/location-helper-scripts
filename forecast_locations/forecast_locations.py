@@ -3,11 +3,12 @@ import folium
 import json
 import os
 
+
 # Manual input location info from Gazetteer
 # https://github.com/MetOffice/locations-search-pkg-os/tree/master/src/main/resources/gazetteer
-c_lon = -3.53
-c_lat = 50.48
-name = "Gazetteer Torquay (Torbay)"
+c_lon = -4.15
+c_lat = 51.06
+name = "Gazetteer Yelland (Devon)"
 
 # Create basic map and add the gazetteer location
 map_uk = folium.Map(location=[c_lat,c_lon], zoom_start=14)
@@ -15,6 +16,20 @@ folium.Marker([c_lat,c_lon],
               icon=folium.Icon(icon="home",color="red"),
               popup=name,
               ).add_to(map_uk)
+
+# Add more locations
+c_lon = -4.17
+c_lat = 51.05
+name = "Gazetteer Instow Youth Hostel (Devon)"
+folium.Marker([c_lat,c_lon], 
+              icon=folium.Icon(icon="home",color="red"),
+              popup=name,
+              ).add_to(map_uk)
+
+
+
+
+
 
 # Add all forecast locations within 0.2 lat and 0.2 lon of the gazetteer location
 with open('forecast_locations/forecast_locations.json', 'r') as f:
