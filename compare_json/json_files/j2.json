@@ -37,7 +37,8 @@
                         "matchCaseSensitiveName": false,
                         "matchWildcardValue": false,
                         "matchCaseSensitiveValue": false,
-                        "escapeValue": false
+                        "escapeValue": false,
+                        "chips": "yummy"
                     }
                 },
                 {
