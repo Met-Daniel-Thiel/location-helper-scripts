@@ -1,0 +1,45 @@
+{   
+    "title":"address list",
+    "names_and_addresses": [
+    {
+        "name": "Alice Smith",
+        "address": {
+        "street": "10 Downing Street",
+        "city": "London",
+        "zip": "SW1A 2AA"
+        }
+    },
+    {
+        "name": "Bob Jones",
+        "address": {
+        "street": "221B Baker Street",
+        "city": "London",
+        "zip": "NW1 6XE"
+        }
+    },
+    {
+        "name": "Charlie Brown",
+        "address": {
+        "street": "123 Sesame Street",
+        "city": "New York",
+        "zip": "10001"
+        }
+    },
+    {
+        "name": "David Lee",
+        "address": {
+        "street": "742 Evergreen Terrace",
+        "city": "Springfield",
+        "zip": ""
+        }
+    },
+    {
+        "name": "Emma Watson",
+        "address": {
+        "street": "4 Privet Drive",
+        "city": "Little Whinging",
+        "zip": ""
+        }
+    }
+    ]
+}
