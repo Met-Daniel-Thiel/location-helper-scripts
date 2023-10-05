@@ -1,11 +1,11 @@
 '''
 Directions for use
-1. copy the contents of two json files you would like to compare into json_file/j1.json and json_file/j1.json
+1. place two json files in compare_json/json_files. j1 and j2 can be over ridden or replaced. json file names are not important.
 2. run compare_json.py
 3. review the differences in differences.json.
     - all differences are highlighted
-    - "$delete" indicates a value present in j1 is missing from j2
-    - "$insert" indicates a value that was not present in j1 is present in j2
+    - "$delete" indicates a value has been removed
+    - "$insert" indicates a value has been added
 '''
 
 import os
@@ -18,10 +18,10 @@ jsons = [json.load(open(json_path + "/" + j, 'r')) for j in os.listdir(json_path
 j1 = jsons[0]
 j2 = jsons[1]
 
-# compare j1 and j2
+# compare j1 and j2, ignoring order
 diff = jsondiff.diff(j1, j2, syntax='symmetric')
 
-# Convert keys to strings
+# Convert keys to strings json does not accept ints
 def convert_keys_to_str(d):
     if isinstance(d, dict):
         return {str(k): convert_keys_to_str(v) for k, v in d.items()}
