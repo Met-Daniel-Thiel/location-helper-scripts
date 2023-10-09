@@ -6,8 +6,8 @@ import webbrowser
 
 # Manual input home location info from Gazetteer
 # https://github.com/MetOffice/locations-search-pkg-os/tree/master/src/main/resources/gazetteer
-c_lon, c_lat = 51.67667932445763, -0.416031173774174
-name = "North Watford (gazetter)"
+c_lat, c_lon= 52.290600128051864, -0.8400090053719166
+name = ""
 
 # Create map and add the home location
 map_uk = folium.Map(location=[c_lat,c_lon], zoom_start=13)
