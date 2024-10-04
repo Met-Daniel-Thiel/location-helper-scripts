@@ -7,7 +7,7 @@ from folium.features import DivIcon
 
 # Manual input home location info from Gazetteer
 # https://github.com/MetOffice/locations-search-pkg-os/tree/master/src/main/resources/gazetteer
-c_lat, c_lon= 51.5144361127993, -0.3163454095075852
+c_lat, c_lon= 54.15053672007862, -2.4696138244186336
 name = ""
 
 # Create map and add the home location
