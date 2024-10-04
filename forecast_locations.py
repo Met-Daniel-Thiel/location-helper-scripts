@@ -7,7 +7,7 @@ from folium.features import DivIcon
 
 # Manual input home location info from Gazetteer
 # https://github.com/MetOffice/locations-search-pkg-os/tree/master/src/main/resources/gazetteer
-c_lat, c_lon= 54.15053672007862, -2.4696138244186336
+c_lat, c_lon= 50.89998006820679, -4.340007305145264
 name = ""
 
 # Create map and add the home location
@@ -27,7 +27,7 @@ for i in forecast_locations:
         lon = i['position']['lon']
         name = i['name']
         
-        if (lat < c_lat + 0.2 and lat > c_lat - 0.2 and lon < c_lon + 0.3 and lon > c_lon - 0.3):
+        if (lat < c_lat + 1 and lat > c_lat - 1 and lon < c_lon + 0.6 and lon > c_lon - 0.6):
             folium.Marker([lat,lon],
                           icon=folium.Icon(icon="info-sign")).add_to(map_uk)
             folium.Marker([lat,lon], 
