@@ -9,7 +9,7 @@ from geopy import Nominatim
 
 # Input any location name or postcode or cordinates as string
 # Input number of forecast locations to be shown as int
-location = "Aberdeen"
+location = "plymouth"
 location_count = 20
 
 # get cords for location
@@ -49,9 +49,10 @@ for l in closest_locations:
 
 # Draw line between search location and closest location
 closest = closest_locations[min(list(closest_locations.keys()))]
+distance = round(geodesic((c_lat, c_long), (closest['lat'],closest['long'])).km,1)
 folium.PolyLine(locations = [[c_lat, c_long], [closest['lat'],closest['long']]],  
                         color='red', weight=10, opacity=0.5,
-                        popup='Closest').add_to(map_uk)
+                        popup=f"{distance} km").add_to(map_uk)
 
 
 # save map and open in a browser
