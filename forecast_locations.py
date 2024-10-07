@@ -7,12 +7,8 @@ from folium.features import DivIcon
 from geopy.distance import geodesic 
 from geopy import Nominatim
 
-
-# Manual input home location info from Gazetteer
-# https://github.com/MetOffice/locations-search-pkg-os/tree/master/src/main/resources/gazetteer
-
-# Location name or Postcode
-location = "Crediton"
+# Input any Location name or Postcode, also number of forecast locations to be shown
+location = "Brendon"
 location_count = 10
 
 # get cords for location
@@ -49,6 +45,13 @@ for l in closest_locations:
 
     folium.Marker([lat,long], icon=folium.Icon(icon="info-sign")).add_to(map_uk)
     folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(map_uk)
+
+# Draw line between search location and closest location
+closest = closest_locations[min(list(closest_locations.keys()))]
+folium.PolyLine(locations = [[c_lat, c_long], [closest['lat'],closest['long']]],  
+                        color='red', weight=10, opacity=0.5,
+                        popup='Closest').add_to(map_uk)
+
 
 # save map and open in a browser
 map_uk.save('forecast_locations_data/map_output_files/forecast_locations_map_uk.html')
