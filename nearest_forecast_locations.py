@@ -7,9 +7,10 @@ from folium.features import DivIcon
 from geopy.distance import geodesic 
 from geopy import Nominatim
 
-# Input any Location name or Postcode, also number of forecast locations to be shown
-location = "Brendon"
-location_count = 10
+# Input any location name or postcode or cordinates as string
+# Input number of forecast locations to be shown as int
+location = "Aberdeen"
+location_count = 20
 
 # get cords for location
 geocoder = Nominatim(user_agent="capt dan")
@@ -60,4 +61,9 @@ webbrowser.open_new(os.path.abspath('forecast_locations_data/map_output_files/fo
 
 
 
-
+'''
+TODO
+- error handling for bad/miss-spelled location names
+- requirements.txt
+- readme
+'''
