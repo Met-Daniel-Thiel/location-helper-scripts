@@ -66,4 +66,5 @@ TODO
 - error handling for bad/miss-spelled location names
 - requirements.txt
 - readme
+- update sorce for forecast locations
 '''
