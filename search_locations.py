@@ -11,7 +11,7 @@ import json
 from geopy.distance import geodesic
 
 # inputs
-search_term = "Isle of Wight"    # search term
+search_term = "Exeter"    # search term
 results = 100   # number of resaults. (app/pw return 5, max 100
 
 # construct and make request
@@ -40,20 +40,20 @@ for location in search_locations:
                 ).add_to(search_locations_map)
     folium.Marker([location['latLong'][0],location['latLong'][1]], 
                   icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0),
-                               html=f'<div style="font-size: 20pt"; "background-color: white, >{location["name"]} ({location["area"]})</div>')
+                               html=f'<div style="font-size: 20pt"; "background-color: white, >{location["name"]}</div>')
                   ).add_to(search_locations_map)   
     locations_added[location["geohash"]] = {"lat":location['latLong'][0], "long":location['latLong'][1]}
     
     # add related forecast location to map if not already present
     if location["nearestGeohash"] not in locations_added.keys():
-        for i in forecast_locations:
-            if location["nearestGeohash"] == i["geohash"]:
-                lat, long, name = i['position']['lat'], i['position']['lon'], i["name"]
+        for location in forecast_locations:
+            if location["nearestGeohash"] == location["geohash"]:
+                lat, long, name = location['position']['lat'], location['position']['lon'], location["name"]
                 folium.Marker([lat,long], icon=folium.Icon(color='blue',icon="sun", prefix='fa'),
-                              popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{i["name"]}<br>Area:{i["metadata"]["unitary_authority"]}<br>Geohash:{i["geohash"]}</div>'
+                              popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{location["name"]}<br>Area:{location["metadata"]["unitary_authority"]}<br>Geohash:{location["geohash"]}</div>'
                               ).add_to(search_locations_map)
                 folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(search_locations_map)
-                locations_added[i["geohash"]] = {"lat":i['position']['lat'], "long":i['position']['lon']}
+                locations_added[location["geohash"]] = {"lat":location['position']['lat'], "long":location['position']['lon']}
                 break
 
     # draw line between seach location and forecast location

@@ -2,7 +2,6 @@
 places all the forecast locations around a given location on a map
 '''
 
-
 import folium
 import json
 import os
@@ -13,7 +12,7 @@ from geopy import Nominatim
 
 # Input any location name or postcode or cordinates as string
 # Input number of forecast locations to be shown as int
-location = "Croxley Green"
+location = "Exeter"
 location_count = 10
 
 # get cords for location
@@ -32,13 +31,13 @@ with open('data/forecast_locations.json', 'r') as f:
 
 # find the closest 10 forecast locations
 closest_locations = {100:""} # initilise dictionary, must have at least one key so will never produce an empty list of keys 
-for i in forecast_locations:
-    if i['domestic'] == True:
-        lat, long = i['position']['lat'], i['position']['lon']
+for location in forecast_locations:
+    if location['domestic'] == True:
+        lat, long = location['position']['lat'], location['position']['lon']
         distance = geodesic((home_lat, home_long), (lat, long)).km
         
         if distance < max(list(closest_locations.keys())):
-            closest_locations[distance] = {"name":i['name'], "lat":lat, "long":long}
+            closest_locations[distance] = {"name":location['name'], "lat":lat, "long":long}
             if len(closest_locations) > location_count:
                 closest_locations.pop(max(list(closest_locations.keys())))
         
@@ -48,8 +47,14 @@ for l in closest_locations:
     lat = closest_locations[l]["lat"]
     long = closest_locations[l]["long"]
 
-    folium.Marker([lat,long], icon=folium.Icon(icon="info-sign")).add_to(forecast_locations_map)
+    folium.Marker([lat,long], icon=folium.Icon(color='blue',icon="sun", prefix='fa'),
+                popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{location["name"]}<br>Area:{location["metadata"]["unitary_authority"]}<br>Geohash:{location["geohash"]}</div>'
+                ).add_to(forecast_locations_map)
     folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(forecast_locations_map)
+
+
+    #folium.Marker([lat,long], icon=folium.Icon(color='blue',icon="sun", prefix='fa')).add_to(forecast_locations_map)
+    #folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(forecast_locations_map)
 
 # Draw line between search location and closest location
 closest = closest_locations[min(list(closest_locations.keys()))]
