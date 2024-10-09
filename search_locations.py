@@ -11,7 +11,7 @@ import json
 from geopy.distance import geodesic
 
 # inputs
-search_term = "Exeter"    # search term
+search_term = "Rutland"    # search term
 results = 100   # number of resaults. (app/pw return 5, max 100
 
 # construct and make request
@@ -33,34 +33,39 @@ search_locations_map = folium.Map(location=[54.67846033848346, -4.35872042041708
 
 # add locations to map
 locations_added={}
-for location in search_locations:
-    folium.Marker([location['latLong'][0],location['latLong'][1]], 
-                icon=folium.Icon(color='red',icon="user", prefix='fa'),
-                popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{location["name"]}<br>Area:{location["area"]}<br>Type:{location["type"]}<br>Geohash:{location["geohash"]}<br>NearestGeohash:{location["nearestGeohash"]}</div>'
+for search_location in search_locations:
+    if search_location["geohash"] == search_location["nearestGeohash"]:
+        set_icon = folium.Icon(color='blue',icon="sun", prefix='fa')
+    else:
+        set_icon = folium.Icon(color='red',icon="user", prefix='fa')
+
+    folium.Marker([search_location['latLong'][0],search_location['latLong'][1]], 
+                icon=set_icon,
+                popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{search_location["name"]}<br>Area:{search_location["area"]}<br>Type:{search_location["type"]}<br>Geohash:{search_location["geohash"]}<br>NearestGeohash:{search_location["nearestGeohash"]}</div>'
                 ).add_to(search_locations_map)
-    folium.Marker([location['latLong'][0],location['latLong'][1]], 
+    folium.Marker([search_location['latLong'][0],search_location['latLong'][1]], 
                   icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0),
-                               html=f'<div style="font-size: 20pt"; "background-color: white, >{location["name"]}</div>')
+                               html=f'<div style="font-size: 20pt"; "background-color: white, >{search_location["name"]}</div>')
                   ).add_to(search_locations_map)   
-    locations_added[location["geohash"]] = {"lat":location['latLong'][0], "long":location['latLong'][1]}
+    locations_added[search_location["geohash"]] = {"lat":search_location['latLong'][0], "long":search_location['latLong'][1]}
     
     # add related forecast location to map if not already present
-    if location["nearestGeohash"] not in locations_added.keys():
-        for location in forecast_locations:
-            if location["nearestGeohash"] == location["geohash"]:
-                lat, long, name = location['position']['lat'], location['position']['lon'], location["name"]
+    if search_location["nearestGeohash"] not in locations_added.keys():
+        for forecast_location in forecast_locations:
+            if search_location["nearestGeohash"] == forecast_location["geohash"]:
+                lat, long, name = forecast_location['position']['lat'], forecast_location['position']['lon'], forecast_location["name"]
                 folium.Marker([lat,long], icon=folium.Icon(color='blue',icon="sun", prefix='fa'),
-                              popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{location["name"]}<br>Area:{location["metadata"]["unitary_authority"]}<br>Geohash:{location["geohash"]}</div>'
+                              popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{forecast_location["name"]}<br>Area:{forecast_location["metadata"]["unitary_authority"]}<br>Geohash:{forecast_location["geohash"]}</div>'
                               ).add_to(search_locations_map)
                 folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(search_locations_map)
-                locations_added[location["geohash"]] = {"lat":location['position']['lat'], "long":location['position']['lon']}
+                locations_added[forecast_location["geohash"]] = {"lat":forecast_location['position']['lat'], "long":forecast_location['position']['lon']}
                 break
 
     # draw line between seach location and forecast location
-    lat_1 = locations_added[location['geohash']]['lat']
-    long_1 = locations_added[location['geohash']]['long']
-    lat_2 = locations_added[location['nearestGeohash']]['lat']
-    long_2 = locations_added[location['nearestGeohash']]['long']
+    lat_1 = locations_added[search_location['geohash']]['lat']
+    long_1 = locations_added[search_location['geohash']]['long']
+    lat_2 = locations_added[search_location['nearestGeohash']]['lat']
+    long_2 = locations_added[search_location['nearestGeohash']]['long']
     distance = round(geodesic((lat_1, long_1), (lat_2,long_2)).km,1)
     folium.PolyLine(locations = [[lat_1, long_1], [lat_2, long_2]],  
                         color='red', weight=10, opacity=0.5,

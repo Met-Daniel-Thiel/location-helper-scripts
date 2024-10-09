@@ -1,5 +1,5 @@
 '''
-places all the forecast locations around a given location on a map
+Places all the nearest forecast locations to a given location on a map and draws a line indicating the closest
 '''
 
 import folium
