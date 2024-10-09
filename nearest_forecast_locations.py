@@ -1,3 +1,7 @@
+'''
+places all the forecast locations around a given location on a map
+'''
+
 
 import folium
 import json
@@ -9,21 +13,21 @@ from geopy import Nominatim
 
 # Input any location name or postcode or cordinates as string
 # Input number of forecast locations to be shown as int
-location = "plymouth"
-location_count = 20
+location = "Croxley Green"
+location_count = 10
 
 # get cords for location
 geocoder = Nominatim(user_agent="capt dan")
 location_raw = geocoder.geocode(location)
-c_lat, c_long = location_raw.latitude, location_raw.longitude
+home_lat, home_long = location_raw.latitude, location_raw.longitude
 
 # Create map and add the home location
-map_uk = folium.Map(location=[c_lat,c_long], zoom_start=12)
-folium.Marker([c_lat,c_long], icon=folium.Icon(icon="home",color="red")).add_to(map_uk)
-folium.Marker([c_lat,c_long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{location}</div>',)).add_to(map_uk)
+forecast_locations_map = folium.Map(location=[home_lat,home_long], zoom_start=12)
+folium.Marker([home_lat,home_long], icon=folium.Icon(icon="home",color="red")).add_to(forecast_locations_map)
+folium.Marker([home_lat,home_long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{location}</div>',)).add_to(forecast_locations_map)
 
-# find closest forecast locations
-with open('forecast_locations_data/forecast_locations.json', 'r') as f:
+# import forecast locations
+with open('data/forecast_locations.json', 'r') as f:
     forecast_locations = json.load(f)
 
 # find the closest 10 forecast locations
@@ -31,7 +35,7 @@ closest_locations = {100:""} # initilise dictionary, must have at least one key 
 for i in forecast_locations:
     if i['domestic'] == True:
         lat, long = i['position']['lat'], i['position']['lon']
-        distance = geodesic((c_lat, c_long), (lat, long)).km
+        distance = geodesic((home_lat, home_long), (lat, long)).km
         
         if distance < max(list(closest_locations.keys())):
             closest_locations[distance] = {"name":i['name'], "lat":lat, "long":long}
@@ -44,20 +48,20 @@ for l in closest_locations:
     lat = closest_locations[l]["lat"]
     long = closest_locations[l]["long"]
 
-    folium.Marker([lat,long], icon=folium.Icon(icon="info-sign")).add_to(map_uk)
-    folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(map_uk)
+    folium.Marker([lat,long], icon=folium.Icon(icon="info-sign")).add_to(forecast_locations_map)
+    folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(forecast_locations_map)
 
 # Draw line between search location and closest location
 closest = closest_locations[min(list(closest_locations.keys()))]
-distance = round(geodesic((c_lat, c_long), (closest['lat'],closest['long'])).km,1)
-folium.PolyLine(locations = [[c_lat, c_long], [closest['lat'],closest['long']]],  
+distance = round(geodesic((home_lat, home_long), (closest['lat'],closest['long'])).km,1)
+folium.PolyLine(locations = [[home_lat, home_long], [closest['lat'],closest['long']]],  
                         color='red', weight=10, opacity=0.5,
-                        popup=f"{distance} km").add_to(map_uk)
+                        popup=f"{distance} km").add_to(forecast_locations_map)
 
 
 # save map and open in a browser
-map_uk.save('forecast_locations_data/map_output_files/forecast_locations_map_uk.html')
-webbrowser.open_new(os.path.abspath('forecast_locations_data/map_output_files/forecast_locations_map_uk.html'))
+forecast_locations_map.save('data/maps/forecast_locations_map_uk.html')
+webbrowser.open_new(os.path.abspath('data/maps/forecast_locations_map_uk.html'))
 
 
 
