@@ -12,10 +12,10 @@ from geopy import Nominatim
 
 # Input any location name or postcode or cordinates as string
 # Input number of forecast locations to be shown as int
-location = "Exeter"
-location_count = 10
+location = "Newtown"
+location_count = 100
 
-# get cords for location
+# get cordinates for location
 geocoder = Nominatim(user_agent="capt dan")
 location_raw = geocoder.geocode(location)
 home_lat, home_long = location_raw.latitude, location_raw.longitude
@@ -34,34 +34,31 @@ closest_locations = {100:""} # initilise dictionary, must have at least one key 
 for location in forecast_locations:
     if location['domestic'] == True:
         lat, long = location['position']['lat'], location['position']['lon']
+        area, geohash = location["metadata"]["unitary_authority"], location["geohash"]
         distance = geodesic((home_lat, home_long), (lat, long)).km
         
         if distance < max(list(closest_locations.keys())):
-            closest_locations[distance] = {"name":location['name'], "lat":lat, "long":long}
+            closest_locations[distance] = {"name":location['name'], "lat":lat, "long":long, "area":area, "geohash":geohash}
             if len(closest_locations) > location_count:
                 closest_locations.pop(max(list(closest_locations.keys())))
         
 # populate map
-for l in closest_locations:
-    name = closest_locations[l]["name"]
-    lat = closest_locations[l]["lat"]
-    long = closest_locations[l]["long"]
+for closest_location in closest_locations:
+    name, area = closest_locations[closest_location]["name"], closest_locations[closest_location]["area"]
+    lat, long = closest_locations[closest_location]["lat"], closest_locations[closest_location]["long"]
+    geohash = closest_locations[closest_location]["geohash"]
+    distance = round(closest_location,1)
 
     folium.Marker([lat,long], icon=folium.Icon(color='blue',icon="sun", prefix='fa'),
-                popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{location["name"]}<br>Area:{location["metadata"]["unitary_authority"]}<br>Geohash:{location["geohash"]}</div>'
+                popup=f'<div style="font-size: 20pt"; "background-color: white, >Name:{name}<br>Area:{area}<br>Geohash:{geohash}</div>'
                 ).add_to(forecast_locations_map)
-    folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(forecast_locations_map)
-
-
-    #folium.Marker([lat,long], icon=folium.Icon(color='blue',icon="sun", prefix='fa')).add_to(forecast_locations_map)
-    #folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name}</div>',)).add_to(forecast_locations_map)
+    folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{name} {distance}km</div>',)).add_to(forecast_locations_map)
 
 # Draw line between search location and closest location
 closest = closest_locations[min(list(closest_locations.keys()))]
 distance = round(geodesic((home_lat, home_long), (closest['lat'],closest['long'])).km,1)
 folium.PolyLine(locations = [[home_lat, home_long], [closest['lat'],closest['long']]],  
-                        color='red', weight=10, opacity=0.5,
-                        popup=f"{distance} km").add_to(forecast_locations_map)
+                        color='red', weight=10, opacity=0.5).add_to(forecast_locations_map)
 
 
 # save map and open in a browser
@@ -73,7 +70,7 @@ webbrowser.open_new(os.path.abspath('data/maps/forecast_locations_map_uk.html'))
 
 '''
 TODO
-- error handling for bad/miss-spelled location names
+- error handling for bad/miss-spelled location names and locations not in UK
 - requirements.txt
 - readme
 - update sorce for forecast locations
