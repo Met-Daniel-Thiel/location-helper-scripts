@@ -10,10 +10,10 @@ from folium.features import DivIcon
 from geopy.distance import geodesic 
 from geopy import Nominatim
 
-# Input any location name or postcode or cordinates as string
-# Input number of forecast locations to be shown as int
-home_location = "WD17 4TE"
-location_count = 20
+######################################################################################
+home_location = "WD17 4TE"     # Any location name, postcode or cordinates as a string
+location_count = 20    # Number of forecast locations to be displayed on map
+######################################################################################
 
 # Get forecast locations from LocsMan
 print("Retrieving current forecast locations from LocsMan")
