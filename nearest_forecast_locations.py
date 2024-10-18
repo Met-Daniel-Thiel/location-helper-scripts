@@ -84,7 +84,3 @@ folium.PolyLine(locations = [[home_lat, home_long], closest['position']], color=
 forecast_locations_map.save('data/maps/forecast_locations_map_uk.html')
 webbrowser.open_new(os.path.abspath('data/maps/forecast_locations_map_uk.html'))
 
-'''
-TODO
-- error handling for bad/miss-spelled location names and locations not in UK
-'''
