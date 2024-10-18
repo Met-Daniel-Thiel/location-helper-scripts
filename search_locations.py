@@ -11,8 +11,8 @@ import json
 from geopy.distance import geodesic
 
 # inputs
-search_term = "Rutland"    # search term
-results = 100   # number of resaults. (app/pw return 5, max 100
+search_term = "Great Glen"    # search term
+results = 5   # number of resaults. (app/pw return 5, max 100
 
 # construct and make request
 url = 'https://www.metoffice.gov.uk/plain-rest-services/location-search' 

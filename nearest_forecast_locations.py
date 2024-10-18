@@ -1,7 +1,3 @@
-'''
-Places all the nearest forecast locations to a given location on a map and draws a line indicating the closest
-'''
-
 import folium
 import os
 import webbrowser
@@ -10,10 +6,10 @@ from folium.features import DivIcon
 from geopy.distance import geodesic 
 from geopy import Nominatim
 
-######################################################################################
-home_location = "WD17 4TE"     # Any location name, postcode or cordinates as a string
-location_count = 20    # Number of forecast locations to be displayed on map
-######################################################################################
+######################################################################################################
+home_location = "Kenton, Devon"     # Any location name, postcode or cordinates as a string
+location_count = 100    # Number of forecast locations to be displayed on map (must be at least one)
+######################################################################################################
 
 # Get forecast locations from LocsMan
 print("Retrieving current forecast locations from LocsMan")
@@ -24,20 +20,26 @@ if response.status_code == 200:
     print(f"Retrieved {len(forecast_locations_locs)} locations from LocsMan")      
 else:     
     print(f"Failed to fetch data. Status code: {response.status_code}")
+    exit()
 
 # get cordinates for home location
 geocoder = Nominatim(user_agent="Captain Dan")
 location_raw = geocoder.geocode(home_location)
-print(f"found location data for: {location_raw.address}")
+try:
+    print(f"Found location data for: {location_raw.address}")
+except AttributeError:
+    print(f'### Sorry. "{home_location}" could not be found. Please check for spelling/errors')
+    exit()
+
 home_lat, home_long = location_raw.latitude, location_raw.longitude
 
 # Create map and add the home location
-forecast_locations_map = folium.Map(location=[home_lat,home_long], zoom_start=13)
+forecast_locations_map = folium.Map(location=[home_lat,home_long], zoom_start=12)
 folium.Marker([home_lat,home_long], icon=folium.Icon(icon="home",color="red")).add_to(forecast_locations_map)
-folium.Marker([home_lat,home_long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 20pt" <div>{home_location}</div>',)).add_to(forecast_locations_map)
+folium.Marker([home_lat,home_long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), html=f'<div style="font-size: 15pt" <div>{home_location}</div>',)).add_to(forecast_locations_map)
    
 # Generate dictionary of closest forecast locations
-closest_forecast_locations = {100000:""} # initilise dictionary, must have at least one key so will never produce an empty list of keys 
+closest_forecast_locations = {100000:""} # initilise no empty dictionary 
 
 for forecast_location in forecast_locations_locs:
     distance = geodesic((home_lat, home_long), (forecast_location['position'])).km
@@ -54,7 +56,7 @@ for closest_forecast_location in closest_forecast_locations:
     distance = round(closest_forecast_location,1)  
 
     folium.Marker([lat,long], icon=DivIcon(icon_size=(250,30),icon_anchor=(0,0), 
-                                           html=f'<div style="font-size: 20pt" <div>{name} {distance}km</div>',)
+                                           html=f'<div style="font-size: 15pt" <div>{name} {distance}km</div>',)
                                            ).add_to(forecast_locations_map)
 
     folium.Marker([lat,long], icon=folium.Icon(color='blue',icon="sun", prefix='fa'),
@@ -85,6 +87,4 @@ webbrowser.open_new(os.path.abspath('data/maps/forecast_locations_map_uk.html'))
 '''
 TODO
 - error handling for bad/miss-spelled location names and locations not in UK
-- requirements.txt
-- readme
 '''
