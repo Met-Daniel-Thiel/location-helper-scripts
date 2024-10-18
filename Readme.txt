@@ -3,6 +3,18 @@
 ### What is this repository for? ###
 Helper scripts to assist with visulising and troubshooting location based issues with the app and public website.
 
+### How do I get set up? ###
+Download from https://github.com/Met-Daniel-Thiel/location-helper-scripts.git
+
+Dependencies
+* Dependencies are contained within requirements.txt
+* run [pip install -r requirements.txt] to install all required dependencies.
+
+### Who do I talk to? ###
+daniel.thiel@metoffice.gov.uk
+
+### How to use each script ###
+
 ** Script: nearest_forecast_locations.py
 * What does it do?
 Produces a map showing the nearest forecast locations to a search location.
@@ -25,15 +37,9 @@ Still in development
 
 
 
-### How do I get set up? ###
-Download from https://github.com/Met-Daniel-Thiel/location-helper-scripts.git
 
-Dependencies
-* Dependencies are contained within requirements.txt
-* run [pip install -r requirements.txt] to install all required dependencies.
 
-### Who do I talk to? ###
-daniel.thiel@metoffice.gov.uk
+
 
 
 
